@@ -1,29 +1,31 @@
-# 05 — Data Contracts (Plain-English)
+# 05 — Data Contracts
 
-## Documents/frontmatter
-- Ingest is contract-gated at QMD/frontmatter validation.
-- Required fields differ by plane; Plane B has stricter required metadata.
-- Doc type rules can add required fields and source event requirements.
+## Current-state read
+- Contracts exist for ingest, identity, plane separation, provenance, retrieval, and tags.
+- Identity contract uses UUIDv7 provenance spine and semantic `doc_id`/deterministic `chunk_id`.
+- Envelope/receipt/state-machine contracts are only partial in current implementation.
 
-## Identity
-- Provenance/event spine uses UUIDv7 fields (`event_id`, `trace_id`, etc.).
-- `doc_id` is normalized human-readable kebab-case.
-- `chunk_id` is deterministic (`doc_id::chunk::<index>`).
+## Gap list
+1. Envelope-specific schema contract is not fully implemented as an enforced runtime object.
+2. Receipt/ack guarantees are not implemented/proven.
+3. Replay guarantees are not implemented/proven.
+4. Identity naming doctrine and current contract fields differ in places.
 
-## Tags
-- Canonical tags and aliases are registry-managed.
-- Alias resolution is required.
-- Unknown tags:
-  - Plane A: stage pending + emit warning violation.
-  - Plane B: reject + emit error violation.
+## Smallest safe patch plan
+- Preserve current contract fields as implementation truth.
+- Document additive migration guidance for identity naming alignment.
+- Keep envelope/receipt/replay items explicitly marked migration target.
 
-## Provenance and vector writes
-- Required provenance fields for vector/index writes include model, dim, source_plane, ingest_run_id, indexed_at.
-- Mixed planes in one table/batch are forbidden.
+## Exact files to edit
+- `docs/project/05_DATA_CONTRACTS.md`
+- `docs/project/06_ACTIVE_TODO.md`
+- `SOURCE_03_DATA_CONTRACTS_AND_MIGRATION.md`
+- `docs/project/07_EVENT_AND_MAIL_ALIGNMENT.md`
 
-## Retrieval results
-- Retrieval output contracts include intent, plan, records, citations, vector usage flag, plane escalation flag, warnings.
+## Validation steps / tests
+- Run `pytest -q`.
+- Confirm docs only; no runtime behavior change.
 
-## Chunks/canonical migration
-- `canonical_chunks_v2` target schema and transform behavior exist in migration script and migration docs.
-- Full live schema contract for all runtime DB tables is not fully implemented in this repository; treat some tables and adapters as partially wired/TODO.
+## Doctrine risks / drift risks
+- Overclaiming delivery/receipt/replay guarantees would conflict with repo evidence.
+- Replacing current identity fields non-additively would violate migration doctrine.

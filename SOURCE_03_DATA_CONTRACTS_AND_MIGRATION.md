@@ -1,23 +1,32 @@
 # SOURCE 03 — Data Contracts and Migration
 
-## Authored truth and registry expectations
-- Authored truth is file-grounded (QMD/docs/contracts/registries/manifests) and validated at boundaries.
-- SQL surfaces act as registry/join/query substrates, not freeform truth replacement.
-- Expected entities include docs/chunks/tags/aliases/provenance/event links as represented in contracts and migration DDL targets.
+## Current-state read (repo-grounded)
+- Contracts exist for ingest, identity, planes, provenance, retrieval, and tags.
+- Ingest enforces required frontmatter by plane + doc_type rules, including Plane B source event requirements by default.
+- Identity currently mixes UUIDv7 provenance fields with semantic document/chunk identity.
+- Migration scaffolding exists for `canonical_chunks_v2`, with explicit TODO for transaction-safe production flow.
 
-## Contract-backed expectations
-- Identity contract: UUIDv7 provenance spine + human-readable normalized `doc_id` + deterministic `chunk_id`.
-- Ingest contract: frontmatter choke-point and plane/doc_type rules.
-- Tag contract: alias resolution required; Plane A stage pending, Plane B reject unknown.
-- Provenance contract: required embedding provenance fields and plane-mixing prohibition.
-- Retrieval contract: deterministic-first, classifier required, vector not first step.
+## Gap list against doctrine
+1. Envelope/event-specific contract files are not fully implemented as runtime-enforced schemas.
+2. Identity field names in `contracts/identity_contract.yaml` only partially match doctrine examples.
+3. Replay/append-log guarantees are not proven; only alignment targets are named.
 
-## Migration philosophy
-- Prefer additive migration paths over silent replacement.
-- Keep legacy surfaces readable during migration windows.
-- Explicitly validate provenance and plane separation before cutover.
-- Do not claim migration completion without code/tests/runtime evidence.
+## Smallest safe patch plan
+- Keep runtime behavior unchanged.
+- Document current contracts strictly as implemented truth.
+- Mark missing envelope/replay guarantees as migration targets.
+- Define additive identity-field migration guidance (no breaking rename claims).
 
-## Current migration target in repo
-- `canonical_chunks_v2` exists as planned DDL + transform helpers in migration script.
-- Transaction-safe backfill/writer cutover remains TODO and must be treated as incomplete.
+## Exact files to edit
+- `SOURCE_03_DATA_CONTRACTS_AND_MIGRATION.md`
+- `docs/project/05_DATA_CONTRACTS.md`
+- `docs/project/06_ACTIVE_TODO.md`
+- `docs/project/07_EVENT_AND_MAIL_ALIGNMENT.md` (new)
+
+## Validation steps
+- Verify source docs map to real repository files.
+- Run tests to confirm no runtime behavior was changed.
+
+## Doctrine risks / drift risks
+- Overstating mailbox or replay guarantees would create doctrine/implementation drift.
+- Silent identity renaming would risk breaking external references; use additive migration only.

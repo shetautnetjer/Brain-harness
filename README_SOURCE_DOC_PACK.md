@@ -1,16 +1,28 @@
 # Source Documentation Pack
 
-This source-doc pack is a compact orientation and doctrine layer built from **current repository evidence** (code, contracts, scripts, tests, manifests) plus settled project rules provided for this repository.
+This source-doc pack is a compact doctrine + migration grounding layer for Brain Harness.
 
-## Purpose
-- Help future agents bootstrap quickly without inventing missing runtime behavior.
-- Keep doctrine visible while preserving the distinction between verified implementation vs policy intent.
-- Provide a stable starting point for narrow, additive patches.
+## Scope and authority
+- **Repository code/contracts/tests/scripts/manifests are implementation truth.**
+- These source docs organize that truth and record settled doctrine.
+- If implementation proof is missing, statements are marked as migration target or future idea.
 
-## Authority model
-1. **Live code + contracts + tests are implementation authority.**
-2. **Source-doc pack files summarize and organize that authority.**
-3. **When docs and code conflict, code/tests/contracts win for implementation truth.**
-
-## Scope note
-This pack intentionally avoids broad redesign. It documents what is verifiable now, calls out uncertainties explicitly, and marks migration targets as targets (not completed runtime behavior).
+## Included packs
+- Core pack:
+  - `SOURCE_01_MISSION_RUNTIME_AND_PLANES.md`
+  - `SOURCE_02_GOVERNANCE_TAGS_AND_RETRIEVAL.md`
+  - `SOURCE_03_DATA_CONTRACTS_AND_MIGRATION.md`
+  - `SOURCE_04_BUILD_ORDER_AND_AGENT_SPLIT.md`
+- Envelope/event pack:
+  - `README_ENVELOPE_SOURCE_DOC_PACK.md`
+  - `SOURCE_ENVELOPE_SOURCE_INDEX.md`
+  - `SOURCE_EVENT_IDENTITY_AND_TIMELINE.md`
+  - `SOURCE_EVENT_ENVELOPE_CONTRACT.md`
+  - `SOURCE_MESSAGE_LIFECYCLE_AND_STATE_MACHINE.md`
+  - `SOURCE_AGENT_AND_MAILBOX_ROUTING.md`
+  - `SOURCE_DOC_ARTIFACT_AND_TASK_RELATIONSHIPS.md`
+  - `SOURCE_DELIVERY_RECEIPT_AND_ACK_CONTRACT.md`
+  - `SOURCE_PROMOTION_AND_CANONICALIZATION_FLOW.md`
+  - `SOURCE_TAG_GOVERNANCE_AND_ALIAS_LAW.md`
+  - `SOURCE_EVENT_APPEND_LOG_AND_REPLAY_RULES.md`
+  - `SOURCE_UUIDV7_USAGE_RULES.md`
