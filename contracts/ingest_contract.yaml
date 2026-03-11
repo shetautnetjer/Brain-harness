@@ -1,11 +1,40 @@
-version: 0.1
+version: 0.2
 ingest:
   choke_point: qmd_frontmatter_validation
   required_frontmatter:
-    - doc_id
-    - doc_type
-    - tags
+    plane_a:
+      - doc_id
+      - doc_type
+      - tags
+    plane_b:
+      - doc_id
+      - doc_type
+      - trust_zone
+      - status
+      - created_at
+      - updated_at
+      - tags
+      - canonical
+  recommended_frontmatter:
+    - version
+    - agent_owner
+    - source_events
+    - related_docs
+    - promotion_state
+    - project
+    - summary
+    - aliases
+  doc_type_rules_registry: registries/doc_type_rules.yaml
   plane_b_source_events:
     default: required
     exception_rules: registries/doc_type_rules.yaml
+  normalized_model_alignment:
+    supported_contract_tables:
+      - documents
+      - document_tags
+      - document_aliases
+      - document_chunks
+      - replay_artifact_links
+    runtime_status:
+      - "TODO: live runtime DB adapters for document_aliases/document_chunks/replay_artifact_links are not fully wired in this pass."
   failure_mode: structured_violation_record

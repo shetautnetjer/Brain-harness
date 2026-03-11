@@ -1,4 +1,4 @@
-version: 0.1
+version: 0.2
 retrieval:
   doctrine: deterministic_first
   classify_step:
@@ -10,6 +10,11 @@ retrieval:
       - decision_recall
       - canonical_truth
       - fuzzy_exploration
+  canonical_truth:
+    local_first: true
+    conditional_plane_b_escalation: true
+    notes:
+      - "TODO: live Plane B adapter wiring is partial; keep explicit warnings when escalation is conditional."
   vector_usage:
     first_step_allowed: false
     allowed_in: [fuzzy_exploration]

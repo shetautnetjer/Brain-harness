@@ -1,11 +1,40 @@
-version: 0.1
+version: 0.2
+global_required_frontmatter_by_plane:
+  plane_a:
+    - doc_id
+    - doc_type
+    - tags
+  plane_b:
+    - doc_id
+    - doc_type
+    - trust_zone
+    - status
+    - created_at
+    - updated_at
+    - tags
+    - canonical
+recommended_frontmatter:
+  - version
+  - agent_owner
+  - source_events
+  - related_docs
+  - promotion_state
+  - project
+  - summary
+  - aliases
 doc_type_rules:
   schema_artifact:
     require_source_events_on_plane_b: false
+    required_frontmatter: [] # TODO: keep minimal until schema_artifact contract is finalized.
     rationale: root doctrine/schema artifact exemption
   promoted_observation:
     require_source_events_on_plane_b: true
+    required_frontmatter:
+      - source_events
     rationale: promoted observation must trace to event spine
   policy_doc:
     require_source_events_on_plane_b: true
+    required_frontmatter:
+      - source_events
+      - summary
     rationale: policy promoted to canonical requires provenance links
