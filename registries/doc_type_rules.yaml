@@ -1,0 +1,11 @@
+version: 0.1
+doc_type_rules:
+  schema_artifact:
+    require_source_events_on_plane_b: false
+    rationale: root doctrine/schema artifact exemption
+  promoted_observation:
+    require_source_events_on_plane_b: true
+    rationale: promoted observation must trace to event spine
+  policy_doc:
+    require_source_events_on_plane_b: true
+    rationale: policy promoted to canonical requires provenance links

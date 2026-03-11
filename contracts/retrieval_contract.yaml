@@ -1,0 +1,23 @@
+version: 0.1
+retrieval:
+  doctrine: deterministic_first
+  classify_step:
+    required: true
+    intents:
+      - artifact_lookup
+      - local_memory
+      - task_state
+      - decision_recall
+      - canonical_truth
+      - fuzzy_exploration
+  vector_usage:
+    first_step_allowed: false
+    allowed_in: [fuzzy_exploration]
+  output_schema:
+    - intent
+    - query_plan
+    - records
+    - citations
+    - used_vector_search
+    - escalated_to_plane_b
+    - warnings
