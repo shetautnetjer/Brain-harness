@@ -1,0 +1,7 @@
+version: 0.1
+planes:
+  plane_a:
+    role: provisional_local_evolving
+  plane_b:
+    role: canonical_curated_shared
+  mixed_embeddings_store: forbidden

@@ -1,0 +1,12 @@
+{
+  "agents": ["main", "jabari", "tariq", "kimi", "heru", "haiku", "arbiter"],
+  "sqlite_paths": [
+    "/home/netjer/.openclaw/memory/main.sqlite",
+    "/home/netjer/.openclaw/memory/jabari.sqlite",
+    "/home/netjer/.openclaw/memory/tariq.sqlite",
+    "/home/netjer/.openclaw/memory/kimi.sqlite",
+    "/home/netjer/.openclaw/memory/heru.sqlite",
+    "/home/netjer/.openclaw/memory/haiku.sqlite",
+    "/home/netjer/.openclaw/memory/arbiter.sqlite"
+  ]
+}
