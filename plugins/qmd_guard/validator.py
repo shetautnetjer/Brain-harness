@@ -40,15 +40,18 @@ def validate_frontmatter(frontmatter: dict[str, Any], plane: str, doc_type_rules
         frontmatter["doc_id"] = normalize_doc_id(str(frontmatter["doc_id"]))
 
     tags: list[str] = []
+    tags_are_list = False
     if "tags" in frontmatter:
         if not isinstance(frontmatter["tags"], list):
             errors.append("tags must be a list in frontmatter")
         else:
             tags = frontmatter["tags"]
+            tags_are_list = True
 
     tag_result = validate_tags(tags=tags, plane=plane)
     errors.extend(tag_result["errors"])
-    frontmatter["tags"] = tag_result["resolved_tags"]
+    if tags_are_list:
+        frontmatter["tags"] = tag_result["resolved_tags"]
 
     rules = doc_type_rules.get("doc_type_rules", {})
     doc_type = frontmatter.get("doc_type")

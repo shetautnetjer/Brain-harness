@@ -66,3 +66,24 @@ def test_recommended_list_fields_warn_on_wrong_shape_without_over_rejecting():
     }
     errors = validate_frontmatter(fm, "plane_a", rules)
     assert "source_events should be a list when provided" in errors
+
+
+def test_valid_tags_are_resolved_through_tag_validation():
+    rules = {"doc_type_rules": {"note": {"require_source_events_on_plane_b": False}}}
+    fm = {"doc_id": "x", "doc_type": "note", "tags": [" mem-governance "]}
+
+    errors = validate_frontmatter(fm, "plane_a", rules)
+
+    assert errors == []
+    assert fm["tags"] == ["memory-governance"]
+
+
+def test_invalid_tags_shape_does_not_mutate_tags_field():
+    rules = {"doc_type_rules": {"note": {"require_source_events_on_plane_b": True}}}
+    fm = {"doc_id": "x", "doc_type": "note", "tags": "not-a-list"}
+
+    errors = validate_frontmatter(fm, "plane_b", rules)
+
+    assert "tags must be a list in frontmatter" in errors
+    assert any("source_events required" in e for e in errors)
+    assert fm["tags"] == "not-a-list"
