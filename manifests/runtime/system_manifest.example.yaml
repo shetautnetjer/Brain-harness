@@ -1,0 +1,23 @@
+manifest_kind: system_manifest
+manifest_state: example
+host:
+  fqdn: netjer.ai
+  os: ubuntu-24.04
+  cpu: AMD Ryzen 9 9950X3D
+  ram_gb: 64
+  gpu:
+    model: NVIDIA RTX 5070 Ti
+    driver: "580.126"
+    cuda: "13.0"
+openclaw:
+  workspace_root: /home/netjer/.openclaw/workspace
+  mailbox_pattern: /home/netjer/.openclaw/workspace/plane-a/mailbox/agents/<agent>/{inbox,outbox,received}/
+  known_agent_roots:
+    - /home/netjer/.openclaw/workspace
+    - /home/netjer/.openclaw/workspace-jabari
+    - /home/netjer/.openclaw/workspace-tariq
+    - /home/netjer/.openclaw/workspace-kimi
+    - /home/netjer/.openclaw/workspace-heru
+    - /home/netjer/.openclaw/workspace-haiku
+    - /home/netjer/.openclaw/workspace-arbiter
+  known_sqlite_glob: /home/netjer/.openclaw/memory/*.sqlite

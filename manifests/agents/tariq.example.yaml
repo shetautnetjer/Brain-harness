@@ -1,0 +1,7 @@
+agent: tariq
+manifest_state: example
+root_dir: /home/netjer/.openclaw/workspace-tariq
+mailbox:
+  inbox: /home/netjer/.openclaw/workspace/plane-a/mailbox/agents/tariq/inbox/
+  outbox: /home/netjer/.openclaw/workspace/plane-a/mailbox/agents/tariq/outbox/
+  received: /home/netjer/.openclaw/workspace/plane-a/mailbox/agents/tariq/received/

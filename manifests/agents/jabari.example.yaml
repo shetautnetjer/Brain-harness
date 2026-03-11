@@ -1,0 +1,7 @@
+agent: jabari
+manifest_state: example
+root_dir: /home/netjer/.openclaw/workspace-jabari
+mailbox:
+  inbox: /home/netjer/.openclaw/workspace/plane-a/mailbox/agents/jabari/inbox/
+  outbox: /home/netjer/.openclaw/workspace/plane-a/mailbox/agents/jabari/outbox/
+  received: /home/netjer/.openclaw/workspace/plane-a/mailbox/agents/jabari/received/

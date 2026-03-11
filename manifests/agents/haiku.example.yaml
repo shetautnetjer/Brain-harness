@@ -1,0 +1,7 @@
+agent: haiku
+manifest_state: example
+root_dir: /home/netjer/.openclaw/workspace-haiku
+mailbox:
+  inbox: /home/netjer/.openclaw/workspace/plane-a/mailbox/agents/haiku/inbox/
+  outbox: /home/netjer/.openclaw/workspace/plane-a/mailbox/agents/haiku/outbox/
+  received: /home/netjer/.openclaw/workspace/plane-a/mailbox/agents/haiku/received/

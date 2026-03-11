@@ -1,0 +1,20 @@
+version: 0.1
+identity:
+  provenance_spine: uuidv7
+  provenance_fields:
+    - event_id
+    - trace_id
+    - session_id
+    - envelope_id
+    - episode_id
+    - ingest_run_id
+    - promotion_packet_id
+  doc_id:
+    type: human_readable
+    normalization: lowercase-kebab-case
+  work_item_id:
+    type: semantic_operational
+    example: wi-2026-03-01-memory-backfill
+  chunk_id:
+    format: doc_id::chunk::<index>
+    deterministic: true
