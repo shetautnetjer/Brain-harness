@@ -67,6 +67,5 @@ Known path seeds include:
 - `tests/`: pytest suite for contract and routing enforcement behavior.
 
 ## Current TODO boundaries
-- Replace UUID fallback helper with a true UUIDv7 implementation in runtime.
 - Implement production-grade SQLite/LanceDB adapters.
 - Add transaction-safe migration execution for `canonical_chunks_v2`.
