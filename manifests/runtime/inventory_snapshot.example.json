@@ -1,5 +1,16 @@
 {
-  "agents": ["main", "jabari", "tariq", "kimi", "heru", "haiku", "arbiter"],
+  "snapshot_kind": "runtime_inventory",
+  "snapshot_state": "example",
+  "source": "static_seed_from_known_runtime_facts",
+  "agents": [
+    {"agent": "main", "root_dir": "/home/netjer/.openclaw/workspace", "state": "known_path_not_verified"},
+    {"agent": "jabari", "root_dir": "/home/netjer/.openclaw/workspace-jabari", "state": "known_path_not_verified"},
+    {"agent": "tariq", "root_dir": "/home/netjer/.openclaw/workspace-tariq", "state": "known_path_not_verified"},
+    {"agent": "kimi", "root_dir": "/home/netjer/.openclaw/workspace-kimi", "state": "known_path_not_verified"},
+    {"agent": "heru", "root_dir": "/home/netjer/.openclaw/workspace-heru", "state": "known_path_not_verified"},
+    {"agent": "haiku", "root_dir": "/home/netjer/.openclaw/workspace-haiku", "state": "known_path_not_verified"},
+    {"agent": "arbiter", "root_dir": "/home/netjer/.openclaw/workspace-arbiter", "state": "known_path_not_verified"}
+  ],
   "sqlite_paths": [
     "/home/netjer/.openclaw/memory/main.sqlite",
     "/home/netjer/.openclaw/memory/jabari.sqlite",
@@ -8,5 +19,6 @@
     "/home/netjer/.openclaw/memory/heru.sqlite",
     "/home/netjer/.openclaw/memory/haiku.sqlite",
     "/home/netjer/.openclaw/memory/arbiter.sqlite"
-  ]
+  ],
+  "mailbox_pattern": "/home/netjer/.openclaw/workspace/plane-a/mailbox/agents/<agent>/{inbox,outbox,received}/"
 }

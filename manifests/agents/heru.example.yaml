@@ -1,2 +1,7 @@
 agent: heru
+manifest_state: example
 root_dir: /home/netjer/.openclaw/workspace-heru
+mailbox:
+  inbox: /home/netjer/.openclaw/workspace/plane-a/mailbox/agents/heru/inbox/
+  outbox: /home/netjer/.openclaw/workspace/plane-a/mailbox/agents/heru/outbox/
+  received: /home/netjer/.openclaw/workspace/plane-a/mailbox/agents/heru/received/

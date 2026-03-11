@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Any
 
 import yaml
 
@@ -8,22 +9,40 @@ from src.brain_harness.events import iso_utc_now
 from src.brain_harness.jsonl import emit_jsonl
 
 
-def load_registry(path: str = "registries/tag_registry.yaml") -> dict:
+def load_registry(path: str = "registries/tag_registry.yaml") -> dict[str, Any]:
     return yaml.safe_load(Path(path).read_text(encoding="utf-8"))
 
 
-def _maps(registry: dict) -> tuple[set[str], dict[str, str]]:
-    canonical = set()
+def _maps(registry: dict[str, Any]) -> tuple[set[str], dict[str, str]]:
+    canonical: set[str] = set()
     aliases: dict[str, str] = {}
     for row in registry.get("tags", []):
-        c = row["canonical_tag"]
+        c = str(row["canonical_tag"]).strip().lower()
         canonical.add(c)
         for alias in row.get("aliases", []):
-            aliases[alias] = c
+            aliases[str(alias).strip().lower()] = c
     return canonical, aliases
 
 
-def validate_tags(tags: list[str], plane: str, pending_path: str = "registries/pending_tags.jsonl") -> dict:
+def _emit_taxonomy_violation(path: str, severity: str, message: str, context: dict[str, Any]) -> None:
+    emit_jsonl(
+        path,
+        {
+            "event_type": "taxonomy_violation",
+            "severity": severity,
+            "message": message,
+            "context": context,
+            "timestamp": iso_utc_now(),
+        },
+    )
+
+
+def validate_tags(
+    tags: list[str],
+    plane: str,
+    pending_path: str = "registries/pending_tags.jsonl",
+    violation_path: str = "audits/violations.jsonl",
+) -> dict[str, Any]:
     registry = load_registry()
     canonical, aliases = _maps(registry)
 
@@ -31,7 +50,10 @@ def validate_tags(tags: list[str], plane: str, pending_path: str = "registries/p
     resolved: list[str] = []
 
     for raw in tags:
-        tag = raw.strip().lower()
+        tag = str(raw).strip().lower()
+        if not tag:
+            continue
+
         final = aliases.get(tag, tag)
         if final in canonical:
             resolved.append(final)
@@ -40,8 +62,22 @@ def validate_tags(tags: list[str], plane: str, pending_path: str = "registries/p
         payload = {"tag": tag, "plane": plane, "timestamp": iso_utc_now(), "status": "pending"}
         if plane == "plane_a":
             emit_jsonl(pending_path, payload)
-            errors.append(f"unknown tag staged for review: {tag}")
+            msg = f"unknown tag staged for review: {tag}"
+            errors.append(msg)
+            _emit_taxonomy_violation(
+                violation_path,
+                "warning",
+                msg,
+                {"tag": tag, "plane": plane, "action": "staged_pending"},
+            )
         else:
-            errors.append(f"unknown tag rejected on plane_b: {tag}")
+            msg = f"unknown tag rejected on plane_b: {tag}"
+            errors.append(msg)
+            _emit_taxonomy_violation(
+                violation_path,
+                "error",
+                msg,
+                {"tag": tag, "plane": plane, "action": "rejected"},
+            )
 
     return {"resolved_tags": sorted(set(resolved)), "errors": errors}

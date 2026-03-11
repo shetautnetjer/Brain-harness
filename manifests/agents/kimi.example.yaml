@@ -1,2 +1,7 @@
 agent: kimi
+manifest_state: example
 root_dir: /home/netjer/.openclaw/workspace-kimi
+mailbox:
+  inbox: /home/netjer/.openclaw/workspace/plane-a/mailbox/agents/kimi/inbox/
+  outbox: /home/netjer/.openclaw/workspace/plane-a/mailbox/agents/kimi/outbox/
+  received: /home/netjer/.openclaw/workspace/plane-a/mailbox/agents/kimi/received/

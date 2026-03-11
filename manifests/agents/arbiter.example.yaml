@@ -1,2 +1,7 @@
 agent: arbiter
+manifest_state: example
 root_dir: /home/netjer/.openclaw/workspace-arbiter
+mailbox:
+  inbox: /home/netjer/.openclaw/workspace/plane-a/mailbox/agents/arbiter/inbox/
+  outbox: /home/netjer/.openclaw/workspace/plane-a/mailbox/agents/arbiter/outbox/
+  received: /home/netjer/.openclaw/workspace/plane-a/mailbox/agents/arbiter/received/

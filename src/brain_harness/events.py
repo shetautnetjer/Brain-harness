@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import UTC, datetime
 from uuid import uuid4
 
 
@@ -10,4 +10,4 @@ def make_event_id(prefix: str = "evt") -> str:
 
 
 def iso_utc_now() -> str:
-    return datetime.utcnow().isoformat() + "Z"
+    return datetime.now(UTC).isoformat().replace("+00:00", "Z")

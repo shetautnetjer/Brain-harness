@@ -1,60 +1,45 @@
 # brain-harness
 
-`brain-harness` is a governance, retrieval, and enforcement harness for an OpenClaw multi-agent memory system.
+`brain-harness` is a governance + retrieval enforcement harness for an OpenClaw multi-agent memory runtime.
 
-## What this solves
-- Makes doctrine executable at ingestion, retrieval, and promotion boundaries.
-- Preserves identity separation (UUIDv7 provenance spine vs human-readable `doc_id`).
-- Enforces Plane A (working) / Plane B (canonical) separation.
-- Implements deterministic-first retrieval with vector fallback only when needed.
-- Emits structured JSONL violations/audits instead of silently swallowing failures.
+## What this repo does (and does not)
+- Enforces doctrine in code at ingestion/retrieval boundaries.
+- Preserves UUID provenance fields while keeping human-readable `doc_id`.
+- Keeps Plane A and Plane B isolated in policy and validation.
+- Implements deterministic-first retrieval routing (vectors are fallback only).
+- Emits structured JSONL violations instead of silent drops.
+- **Does not** pretend to provide fully-wired production DB adapters in this scaffold.
 
-## Doctrine summary
-1. UUIDv7-style provenance IDs are the event spine (`event_id`, `trace_id`, `session_id`, etc.).
-2. `doc_id` remains human-readable and normalized to lowercase kebab-case.
-3. Plane A and Plane B are separate stores, policies, and write paths.
-4. Canonical/promoted docs should include `source_events[]`, with doc-type exemptions.
-5. Tags are governed; unknown tags are staged on Plane A and rejected on Plane B.
-6. Retrieval is deterministic-first (registry/SQL) and only then vector fallback.
+## Runtime inventory realism
+Example manifests under `manifests/runtime/` are explicitly marked as `example` state.
+Discovered runtime state should be produced via `scripts/collect_agent_state.py`, which reports known paths plus discovered existence checks.
 
-## Repo layout
-- `contracts/`: machine-readable doctrine contracts.
-- `registries/`: governed tags, pending tags queue, doc-type rules.
-- `plugins/`: guard and router plugins.
-- `scripts/`: runtime collection, audits, validation, migration starter utilities.
-- `workflows/`: Lobster deterministic workflow templates.
-- `prompts/`: copy/paste prompts for inventory, classification, and governance.
-- `docs/`: architecture, operations, and migration notes.
+Known path seeds include:
+- `/home/netjer/.openclaw/workspace`
+- `/home/netjer/.openclaw/workspace-jabari`
+- `/home/netjer/.openclaw/workspace-tariq`
+- `/home/netjer/.openclaw/workspace-kimi`
+- `/home/netjer/.openclaw/workspace-heru`
+- `/home/netjer/.openclaw/workspace-haiku`
+- `/home/netjer/.openclaw/workspace-arbiter`
+- `/home/netjer/.openclaw/memory/*.sqlite`
+- `/home/netjer/.openclaw/workspace/plane-a/mailbox/agents/<agent>/{inbox,outbox,received}/`
 
 ## Setup
 ```bash
-python -m venv .venv
-source .venv/bin/activate
 pip install -e .[dev]
-pytest
+pytest -q
 ```
 
-## Validation commands
+## Validation entry points
 ```bash
 python scripts/validate_qmd.py path/to/doc.qmd --plane plane_a
 python scripts/validate_tags.py --plane plane_b memory doctrine
 python scripts/validate_provenance.py payload.json
-python scripts/validate_identity.py "My_Doc ID" 2
+python scripts/collect_agent_state.py
 ```
 
-## Retrieval behavior
-1. Classify intent (`artifact_lookup`, `local_memory`, `task_state`, `decision_recall`, `canonical_truth`, `fuzzy_exploration`).
-2. Route deterministic lookup first.
-3. Use vectors only in `fuzzy_exploration` fallback path.
-4. Return strict JSON output contract.
-
-## Tag governance
-- Governed source: `registries/tag_registry.yaml`.
-- Aliases resolve to canonical tags.
-- Unknown Plane A tags go to `registries/pending_tags.jsonl` + warning record.
-- Unknown Plane B tags are rejected with violations.
-
-## TODO (honest gaps)
-- Replace UUID fallback helper with true UUIDv7 runtime dependency.
-- Wire retrieval adapters to real OpenClaw SQLite/LanceDB handles.
-- Add stricter schema checks for QMD body sections beyond frontmatter.
+## Current TODO boundaries
+- Replace UUID fallback helper with true UUIDv7 implementation in runtime.
+- Implement production-grade SQLite/LanceDB adapters.
+- Add transaction-safe migration execution for `canonical_chunks_v2`.

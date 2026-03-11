@@ -1,2 +1,7 @@
 agent: main
+manifest_state: example
 root_dir: /home/netjer/.openclaw/workspace
+mailbox:
+  inbox: /home/netjer/.openclaw/workspace/plane-a/mailbox/agents/main/inbox/
+  outbox: /home/netjer/.openclaw/workspace/plane-a/mailbox/agents/main/outbox/
+  received: /home/netjer/.openclaw/workspace/plane-a/mailbox/agents/main/received/
