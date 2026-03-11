@@ -1,0 +1,11 @@
+host:
+  fqdn: netjer.ai
+  os: ubuntu-24.04
+  cpu: AMD Ryzen 9 9950X3D
+  ram_gb: 64
+  gpu:
+    model: NVIDIA RTX 5070 Ti
+    driver: 580.126
+    cuda: 13.0
+openclaw:
+  workspace_root: /home/netjer/.openclaw/workspace

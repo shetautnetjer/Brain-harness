@@ -1,0 +1,20 @@
+version: 0.1
+tags:
+  - canonical_tag: memory-governance
+    aliases: [memory_governance, mem-governance]
+    category: doctrine
+    planes_allowed: [plane_a, plane_b]
+    status: active
+    notes: Example governed tag.
+  - canonical_tag: promotion
+    aliases: [promote, canonical-promotion]
+    category: workflow
+    planes_allowed: [plane_a, plane_b]
+    status: active
+    notes: Used for promotion packets and reviews.
+  - canonical_tag: local-observation
+    aliases: [observation-local]
+    category: evidence
+    planes_allowed: [plane_a]
+    status: active
+    notes: Plane A-only observation tag.

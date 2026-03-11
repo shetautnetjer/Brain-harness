@@ -1,0 +1,5 @@
+[console_scripts]
+brain-retrieve = plugins.retrieval_router.cli:main
+brain-validate-provenance = plugins.provenance_guard.cli:main
+brain-validate-qmd = plugins.qmd_guard.cli:main
+brain-validate-tags = plugins.tag_guard.cli:main

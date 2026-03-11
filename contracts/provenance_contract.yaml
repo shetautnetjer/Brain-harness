@@ -1,0 +1,14 @@
+version: 0.1
+vector_write_provenance:
+  required_fields:
+    - embedding_model
+    - embedding_dim
+    - source_plane
+    - ingest_run_id
+    - indexed_at
+  optional_fields:
+    - promotion_packet_id
+    - source_events_json
+    - tags_json
+    - aliases_json
+  plane_mixing_in_single_table: forbidden

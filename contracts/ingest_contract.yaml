@@ -1,0 +1,11 @@
+version: 0.1
+ingest:
+  choke_point: qmd_frontmatter_validation
+  required_frontmatter:
+    - doc_id
+    - doc_type
+    - tags
+  plane_b_source_events:
+    default: required
+    exception_rules: registries/doc_type_rules.yaml
+  failure_mode: structured_violation_record
