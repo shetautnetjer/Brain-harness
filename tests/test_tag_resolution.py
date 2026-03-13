@@ -54,3 +54,32 @@ def test_pending_family_tag_allowed_on_plane_a():
     out = validate_tags(["pending/adaptive-learning"], "plane_a")
     assert out["resolved_tags"] == ["pending/adaptive-learning"]
     assert out["errors"] == []
+
+
+def test_plane_restriction_retrieval_working_lane_rejected_on_plane_b(tmp_path):
+    out = validate_tags(
+        ["retrieval/working-lane"],
+        "plane_b",
+        pending_path=str(tmp_path / "pending.jsonl"),
+        violation_path=str(tmp_path / "violations.jsonl"),
+    )
+    assert out["resolved_tags"] == []
+    assert any("rejected" in e for e in out["errors"])
+
+
+def test_v2_alias_resolution_device_and_identity_plane_b():
+    out = validate_tags(["browser", "main-agent"], "plane_b")
+    assert out["resolved_tags"] == ["device/web", "identity/main"]
+
+
+def test_identity_registry_is_limited_to_main_and_arbiter():
+    import yaml
+    from pathlib import Path
+
+    registry = yaml.safe_load(Path("registries/tag_registry.yaml").read_text(encoding="utf-8"))
+    ids = sorted(
+        row["canonical_tag"]
+        for row in registry.get("tags", [])
+        if str(row.get("canonical_tag", "")).startswith("identity/")
+    )
+    assert ids == ["identity/arbiter", "identity/main"]
