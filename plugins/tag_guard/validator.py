@@ -64,7 +64,8 @@ def validate_tags(
 
         timestamp = iso_utc_now()
         common_context = {
-            "raw_tag": raw,
+            "raw_tag": str(raw),
+            "raw_tag_type": type(raw).__name__,
             "normalized_tag": normalized_tag,
             "resolved_tag": resolved_tag if resolution_status == "resolved_canonical" else None,
             "resolution_status": resolution_status,

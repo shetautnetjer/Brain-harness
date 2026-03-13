@@ -1,4 +1,6 @@
 import json
+from datetime import date
+
 
 from plugins.tag_guard.validator import validate_tags
 
@@ -170,3 +172,49 @@ def test_unresolved_pending_only_on_plane_a_and_distinct_violation_actions(tmp_p
         assert context["normalized_tag"] == "totally/new-tag"
         assert context["resolution_status"] == "unresolved"
         assert context["event_id"].startswith("tag_guard_")
+
+
+class _StringableCanonicalMemory:
+    def __str__(self) -> str:
+        return "memory/canonical"
+
+
+def test_non_string_raw_tag_serialized_for_unresolved_emission(tmp_path):
+    pending = tmp_path / "pending.jsonl"
+    violations = tmp_path / "violations.jsonl"
+
+    out = validate_tags(
+        [date(2026, 1, 2)],
+        "plane_a",
+        pending_path=str(pending),
+        violation_path=str(violations),
+    )
+
+    assert any("staged" in e for e in out["errors"])
+
+    pending_row = json.loads(pending.read_text(encoding="utf-8").splitlines()[0])
+    assert pending_row["raw_tag"] == "2026-01-02"
+    assert pending_row["raw_tag_type"] == "date"
+
+    violation_row = json.loads(violations.read_text(encoding="utf-8").splitlines()[0])
+    assert violation_row["context"]["raw_tag"] == "2026-01-02"
+    assert violation_row["context"]["raw_tag_type"] == "date"
+
+
+def test_non_string_raw_tag_serialized_for_plane_disallowed_violation(tmp_path):
+    violations = tmp_path / "violations.jsonl"
+
+    out = validate_tags(
+        [_StringableCanonicalMemory()],
+        "plane_a",
+        pending_path=str(tmp_path / "pending.jsonl"),
+        violation_path=str(violations),
+    )
+
+    assert out["resolved_tags"] == []
+    assert any("not allowed on plane_a" in e for e in out["errors"])
+
+    violation_row = json.loads(violations.read_text(encoding="utf-8").splitlines()[0])
+    assert violation_row["context"]["raw_tag"] == "memory/canonical"
+    assert violation_row["context"]["raw_tag_type"] == "_StringableCanonicalMemory"
+    assert violation_row["context"]["action"] == "rejected_plane_disallowed"
