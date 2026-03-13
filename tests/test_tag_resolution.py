@@ -21,7 +21,7 @@ def test_unknown_tag_rejected_on_plane_b_emits_violation(tmp_path):
     pending = tmp_path / "pending.jsonl"
     violations = tmp_path / "violations.jsonl"
     out = validate_tags(["unknown-tag"], "plane_b", pending_path=str(pending), violation_path=str(violations))
-    assert any("rejected" in e for e in out["errors"])
+    assert any(("rejected" in e) or ("not allowed" in e) for e in out["errors"])
 
     rows = [json.loads(line) for line in violations.read_text(encoding="utf-8").splitlines()]
     assert rows[0]["event_type"] == "taxonomy_violation"
@@ -37,7 +37,7 @@ def test_pending_family_tag_rejected_on_plane_b(tmp_path):
         violation_path=str(violations),
     )
     assert out["resolved_tags"] == []
-    assert any("rejected" in e for e in out["errors"])
+    assert any(("rejected" in e) or ("not allowed" in e) for e in out["errors"])
 
 
 def test_unknown_tag_staged_on_plane_a(tmp_path):
@@ -64,7 +64,7 @@ def test_plane_restriction_retrieval_working_lane_rejected_on_plane_b(tmp_path):
         violation_path=str(tmp_path / "violations.jsonl"),
     )
     assert out["resolved_tags"] == []
-    assert any("rejected" in e for e in out["errors"])
+    assert any(("rejected" in e) or ("not allowed" in e) for e in out["errors"])
 
 
 def test_v2_alias_resolution_device_and_identity_plane_b():
@@ -83,3 +83,90 @@ def test_identity_registry_is_limited_to_main_and_arbiter():
         if str(row.get("canonical_tag", "")).startswith("identity/")
     )
     assert ids == ["identity/arbiter", "identity/main"]
+
+
+def test_memory_canonical_allowed_on_plane_b():
+    out = validate_tags(["memory/canonical"], "plane_b")
+    assert out["resolved_tags"] == ["memory/canonical"]
+    assert out["errors"] == []
+
+
+def test_canonical_memory_alias_allowed_on_plane_b():
+    out = validate_tags(["canonical-memory"], "plane_b")
+    assert out["resolved_tags"] == ["memory/canonical"]
+    assert out["errors"] == []
+
+
+def test_memory_canonical_rejected_plane_a_not_staged_pending(tmp_path):
+    pending = tmp_path / "pending.jsonl"
+    violations = tmp_path / "violations.jsonl"
+
+    out = validate_tags(
+        ["memory/canonical"],
+        "plane_a",
+        pending_path=str(pending),
+        violation_path=str(violations),
+    )
+
+    assert out["resolved_tags"] == []
+    assert any("not allowed on plane_a" in e for e in out["errors"])
+    assert not pending.exists()
+
+    rows = [json.loads(line) for line in violations.read_text(encoding="utf-8").splitlines()]
+    assert rows[0]["context"]["action"] == "rejected_plane_disallowed"
+    assert rows[0]["context"]["reason"] == "plane_disallowed"
+
+
+def test_memory_working_rejected_plane_b_not_staged_pending(tmp_path):
+    pending = tmp_path / "pending.jsonl"
+    violations = tmp_path / "violations.jsonl"
+
+    out = validate_tags(
+        ["memory/working"],
+        "plane_b",
+        pending_path=str(pending),
+        violation_path=str(violations),
+    )
+
+    assert out["resolved_tags"] == []
+    assert any("not allowed on plane_b" in e for e in out["errors"])
+    assert not pending.exists()
+
+    rows = [json.loads(line) for line in violations.read_text(encoding="utf-8").splitlines()]
+    assert rows[0]["context"]["action"] == "rejected_plane_disallowed"
+
+
+def test_unresolved_pending_only_on_plane_a_and_distinct_violation_actions(tmp_path):
+    pending = tmp_path / "pending.jsonl"
+    violations = tmp_path / "violations.jsonl"
+
+    out_a = validate_tags(
+        ["totally/new-tag"],
+        "plane_a",
+        pending_path=str(pending),
+        violation_path=str(violations),
+    )
+    out_b = validate_tags(
+        ["totally/new-tag"],
+        "plane_b",
+        pending_path=str(pending),
+        violation_path=str(violations),
+    )
+
+    assert any("staged" in e for e in out_a["errors"])
+    assert any("unknown tag rejected" in e for e in out_b["errors"])
+
+    pending_rows = [json.loads(line) for line in pending.read_text(encoding="utf-8").splitlines()]
+    assert len(pending_rows) == 1
+    assert pending_rows[0]["action"] == "staged_pending_unknown"
+    assert pending_rows[0]["resolution_status"] == "unresolved"
+
+    violation_rows = [json.loads(line) for line in violations.read_text(encoding="utf-8").splitlines()]
+    actions = [row["context"]["action"] for row in violation_rows]
+    assert actions == ["staged_pending_unknown", "rejected_unknown_plane_b"]
+
+    for row in violation_rows:
+        context = row["context"]
+        assert context["normalized_tag"] == "totally/new-tag"
+        assert context["resolution_status"] == "unresolved"
+        assert context["event_id"].startswith("tag_guard_")
