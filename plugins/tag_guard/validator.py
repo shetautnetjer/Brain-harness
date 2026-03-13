@@ -5,7 +5,7 @@ from typing import Any
 
 import yaml
 
-from src.brain_harness.events import iso_utc_now
+from src.brain_harness.events import iso_utc_now, make_event_id
 from src.brain_harness.jsonl import emit_jsonl
 
 
@@ -50,35 +50,80 @@ def validate_tags(
     resolved: list[str] = []
 
     for raw in tags:
-        tag = str(raw).strip().lower()
-        if not tag:
+        normalized_tag = str(raw).strip().lower()
+        if not normalized_tag:
             continue
 
-        final = aliases.get(tag, tag)
-        allowed_planes = canonical.get(final)
-        if allowed_planes and plane in allowed_planes:
-            resolved.append(final)
+        resolved_tag = aliases.get(normalized_tag, normalized_tag)
+        allowed_planes = canonical.get(resolved_tag)
+        resolution_status = "resolved_canonical" if allowed_planes else "unresolved"
+
+        if resolution_status == "resolved_canonical" and plane in allowed_planes:
+            resolved.append(resolved_tag)
             continue
 
-        payload = {"tag": tag, "plane": plane, "timestamp": iso_utc_now(), "status": "pending"}
-        if plane == "plane_a":
+        timestamp = iso_utc_now()
+        common_context = {
+            "raw_tag": raw,
+            "normalized_tag": normalized_tag,
+            "resolved_tag": resolved_tag if resolution_status == "resolved_canonical" else None,
+            "resolution_status": resolution_status,
+            "plane": plane,
+            "timestamp": timestamp,
+            "event_id": make_event_id("tag_guard"),
+        }
+
+        if resolution_status == "unresolved" and plane == "plane_a":
+            payload = {
+                "tag": normalized_tag,
+                "plane": plane,
+                "timestamp": timestamp,
+                "status": "pending",
+                "action": "staged_pending_unknown",
+                "reason": "unknown_unresolved_tag",
+                **common_context,
+            }
             emit_jsonl(pending_path, payload)
-            msg = f"unknown tag staged for review: {tag}"
+            msg = f"unknown tag staged for review: {normalized_tag}"
             errors.append(msg)
             _emit_taxonomy_violation(
                 violation_path,
                 "warning",
                 msg,
-                {"tag": tag, "plane": plane, "action": "staged_pending"},
+                {
+                    **common_context,
+                    "action": "staged_pending_unknown",
+                    "reason": "unknown_unresolved_tag",
+                },
             )
-        else:
-            msg = f"unknown tag rejected on plane_b: {tag}"
+            continue
+
+        if resolution_status == "unresolved":
+            msg = f"unknown tag rejected on plane_b: {normalized_tag}"
             errors.append(msg)
             _emit_taxonomy_violation(
                 violation_path,
                 "error",
                 msg,
-                {"tag": tag, "plane": plane, "action": "rejected"},
+                {
+                    **common_context,
+                    "action": "rejected_unknown_plane_b",
+                    "reason": "unknown_unresolved_tag",
+                },
             )
+            continue
+
+        msg = f"tag not allowed on {plane}: {resolved_tag}"
+        errors.append(msg)
+        _emit_taxonomy_violation(
+            violation_path,
+            "error",
+            msg,
+            {
+                **common_context,
+                "action": "rejected_plane_disallowed",
+                "reason": "plane_disallowed",
+            },
+        )
 
     return {"resolved_tags": sorted(set(resolved)), "errors": errors}
