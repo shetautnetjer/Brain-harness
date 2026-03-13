@@ -1,7 +1,10 @@
-version: 0.1
+version: 0.2
 tag_governance:
   registry_source: registries/tag_registry.yaml
   alias_resolution: required
+  admission:
+    plane_a: canonical_or_pending_with_violation_for_unknown
+    plane_b: canonical_only_or_alias_resolved_to_canonical
   unknown_tags:
     plane_a: stage_pending_and_emit_violation
     plane_b: reject_and_emit_violation

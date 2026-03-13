@@ -13,12 +13,12 @@ def load_registry(path: str = "registries/tag_registry.yaml") -> dict[str, Any]:
     return yaml.safe_load(Path(path).read_text(encoding="utf-8"))
 
 
-def _maps(registry: dict[str, Any]) -> tuple[set[str], dict[str, str]]:
-    canonical: set[str] = set()
+def _maps(registry: dict[str, Any]) -> tuple[dict[str, set[str]], dict[str, str]]:
+    canonical: dict[str, set[str]] = {}
     aliases: dict[str, str] = {}
     for row in registry.get("tags", []):
         c = str(row["canonical_tag"]).strip().lower()
-        canonical.add(c)
+        canonical[c] = {str(p).strip().lower() for p in row.get("planes_allowed", [])}
         for alias in row.get("aliases", []):
             aliases[str(alias).strip().lower()] = c
     return canonical, aliases
@@ -55,7 +55,8 @@ def validate_tags(
             continue
 
         final = aliases.get(tag, tag)
-        if final in canonical:
+        allowed_planes = canonical.get(final)
+        if allowed_planes and plane in allowed_planes:
             resolved.append(final)
             continue
 
