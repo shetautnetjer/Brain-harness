@@ -55,8 +55,9 @@ def validate_tags(
             continue
 
         resolved_tag = aliases.get(normalized_tag, normalized_tag)
-        allowed_planes = canonical.get(resolved_tag)
-        resolution_status = "resolved_canonical" if allowed_planes else "unresolved"
+        is_resolved_canonical = resolved_tag in canonical
+        allowed_planes = canonical.get(resolved_tag, set())
+        resolution_status = "resolved_canonical" if is_resolved_canonical else "unresolved"
 
         if resolution_status == "resolved_canonical" and plane in allowed_planes:
             resolved.append(resolved_tag)

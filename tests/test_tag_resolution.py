@@ -174,6 +174,42 @@ def test_unresolved_pending_only_on_plane_a_and_distinct_violation_actions(tmp_p
         assert context["event_id"].startswith("tag_guard_")
 
 
+def test_canonical_with_empty_plane_list_is_resolved_not_pending(monkeypatch, tmp_path):
+    from plugins.tag_guard import validator
+
+    def _fake_registry() -> dict[str, object]:
+        return {
+            "tags": [
+                {
+                    "canonical_tag": "memory/no-plane",
+                    "planes_allowed": [],
+                    "aliases": ["no-plane"],
+                }
+            ]
+        }
+
+    monkeypatch.setattr(validator, "load_registry", _fake_registry)
+
+    pending = tmp_path / "pending.jsonl"
+    violations = tmp_path / "violations.jsonl"
+
+    out = validator.validate_tags(
+        ["no-plane"],
+        "plane_a",
+        pending_path=str(pending),
+        violation_path=str(violations),
+    )
+
+    assert out["resolved_tags"] == []
+    assert any("not allowed on plane_a" in e for e in out["errors"])
+    assert not pending.exists()
+
+    violation_row = json.loads(violations.read_text(encoding="utf-8").splitlines()[0])
+    assert violation_row["context"]["resolution_status"] == "resolved_canonical"
+    assert violation_row["context"]["resolved_tag"] == "memory/no-plane"
+    assert violation_row["context"]["action"] == "rejected_plane_disallowed"
+
+
 class _StringableCanonicalMemory:
     def __str__(self) -> str:
         return "memory/canonical"
