@@ -1,0 +1,33 @@
+{
+  "record_type": "envelope",
+  "authority_scope": "authoritative-transport-record",
+  "envelope_id": "018f8d92-4f10-7a21-8f2b-3e1979d0b101",
+  "event_id": "018f8d92-4f12-7b31-8ad0-0b2f6e66a202",
+  "event_type": "envelope.created",
+  "occurred_at": "2026-03-14T12:00:00Z",
+  "identity": {
+    "semantic": {
+      "project_id": "brain-harness-comms",
+      "comms_thread_id": "thread:main-agent-handoff"
+    },
+    "concrete": {
+      "trace_id": "018f8d92-4f15-7d20-8d20-2ff843f4d404"
+    }
+  },
+  "route": {
+    "from": "agent://arbiter",
+    "to": "agent://kimi"
+  },
+  "body": {
+    "subject": "handoff",
+    "payload": {
+      "instruction": "validate-before-promote"
+    }
+  },
+  "tags": [
+    "comms/mailbox",
+    "event/envelope",
+    "workflow/handoff"
+  ],
+  "authoritative": true
+}

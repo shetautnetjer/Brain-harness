@@ -1,0 +1,19 @@
+{
+  "record_type": "delivery_receipt",
+  "authority_scope": "authoritative-delivery-fact",
+  "receipt_id": "018f8d92-4f16-7e44-8a11-07d62ec4e505",
+  "event_id": "018f8d92-4f17-7f31-8de3-091a67a8f606",
+  "envelope_id": "018f8d92-4f10-7a21-8f2b-3e1979d0b101",
+  "identity": {
+    "semantic": {
+      "project_id": "brain-harness-comms",
+      "comms_thread_id": "thread:main-agent-handoff"
+    },
+    "concrete": {
+      "trace_id": "018f8d92-4f15-7d20-8d20-2ff843f4d404"
+    }
+  },
+  "delivery_status": "delivered",
+  "delivered_at": "2026-03-14T12:00:01Z",
+  "authoritative": true
+}

@@ -1,0 +1,19 @@
+{
+  "record_type": "acknowledgement",
+  "authority_scope": "authoritative-ownership-fact",
+  "ack_id": "018f8d92-4f18-7123-8f55-e4acd6d17707",
+  "event_id": "018f8d92-4f19-7234-8a66-67f0f3cf2808",
+  "envelope_id": "018f8d92-4f10-7a21-8f2b-3e1979d0b101",
+  "identity": {
+    "semantic": {
+      "project_id": "brain-harness-comms",
+      "comms_thread_id": "thread:main-agent-handoff"
+    },
+    "concrete": {
+      "trace_id": "018f8d92-4f15-7d20-8d20-2ff843f4d404"
+    }
+  },
+  "ack_status": "accepted",
+  "acknowledged_at": "2026-03-14T12:00:03Z",
+  "authoritative": true
+}

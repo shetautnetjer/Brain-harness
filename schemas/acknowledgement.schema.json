@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://brain-harness.local/schemas/acknowledgement.schema.json",
+  "title": "Acknowledgement (Authoritative Ownership/Acceptance Fact)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "record_type",
+    "authority_scope",
+    "ack_id",
+    "event_id",
+    "envelope_id",
+    "identity",
+    "ack_status",
+    "acknowledged_at",
+    "authoritative"
+  ],
+  "properties": {
+    "record_type": { "const": "acknowledgement" },
+    "authority_scope": { "const": "authoritative-ownership-fact" },
+    "ack_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "event_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "envelope_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "identity": { "$ref": "./comms_identity.schema.json" },
+    "ack_status": {
+      "type": "string",
+      "enum": ["accepted", "rejected"]
+    },
+    "acknowledged_at": { "type": "string", "format": "date-time" },
+    "authoritative": { "const": true }
+  }
+}

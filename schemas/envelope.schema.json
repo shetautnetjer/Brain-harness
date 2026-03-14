@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://brain-harness.local/schemas/envelope.schema.json",
+  "title": "Mailbox Envelope (Authoritative Transport Record)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "record_type",
+    "authority_scope",
+    "envelope_id",
+    "event_id",
+    "event_type",
+    "occurred_at",
+    "identity",
+    "route",
+    "body",
+    "authoritative"
+  ],
+  "properties": {
+    "record_type": { "const": "envelope" },
+    "authority_scope": { "const": "authoritative-transport-record" },
+    "envelope_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "event_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "event_type": { "type": "string", "minLength": 1 },
+    "occurred_at": { "type": "string", "format": "date-time" },
+    "identity": { "$ref": "./comms_identity.schema.json" },
+    "route": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["from", "to"],
+      "properties": {
+        "from": { "type": "string", "minLength": 1 },
+        "to": { "type": "string", "minLength": 1 }
+      }
+    },
+    "body": { "type": "object" },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^[a-z0-9-]+\/[a-z0-9-]+$" }
+    },
+    "authoritative": { "const": true }
+  }
+}

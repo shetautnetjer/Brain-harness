@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://brain-harness.local/schemas/comms_identity.schema.json",
+  "title": "Comms Identity",
+  "description": "Strict separation of umbrella semantic identity from concrete UUID7 trace identity.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["semantic", "concrete"],
+  "properties": {
+    "semantic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["project_id", "comms_thread_id"],
+      "properties": {
+        "project_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable umbrella project identity."
+        },
+        "comms_thread_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable umbrella communication/thread identity."
+        }
+      }
+    },
+    "concrete": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["trace_id"],
+      "properties": {
+        "trace_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "description": "Concrete UUID7 causal tracing identity."
+        }
+      }
+    }
+  }
+}
