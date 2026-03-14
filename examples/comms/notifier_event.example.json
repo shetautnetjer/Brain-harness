@@ -1,0 +1,16 @@
+{
+  "record_type": "notifier_event",
+  "authority_scope": "derived-notification-hint",
+  "event_id": "018f8d92-4f20-7344-8bb1-7b6da9e30909",
+  "notifier_type": "fs-watch",
+  "hint": {
+    "message": "New comms activity detected. Check mailbox and ledgers.",
+    "check_authoritative_state": true,
+    "comms_thread_id": "thread:main-agent-handoff",
+    "envelope_id": "018f8d92-4f10-7a21-8f2b-3e1979d0b101",
+    "event_id": "018f8d92-4f12-7b31-8ad0-0b2f6e66a202",
+    "authoritative_refs": ["mailbox", "event-history", "receipt-ledger", "ack-ledger"]
+  },
+  "generated_at": "2026-03-14T12:00:02Z",
+  "authoritative": false
+}

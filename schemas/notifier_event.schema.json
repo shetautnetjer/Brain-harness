@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://brain-harness.local/schemas/notifier_event.schema.json",
+  "title": "Notifier Event (Derived Hint Only)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "record_type",
+    "authority_scope",
+    "event_id",
+    "notifier_type",
+    "hint",
+    "generated_at",
+    "authoritative"
+  ],
+  "properties": {
+    "record_type": { "const": "notifier_event" },
+    "authority_scope": { "const": "derived-notification-hint" },
+    "event_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "notifier_type": {
+      "type": "string",
+      "enum": ["fs-watch", "session-ping", "polling-fallback", "sse", "websocket", "local-socket"]
+    },
+    "hint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["message", "check_authoritative_state", "authoritative_refs"],
+      "properties": {
+        "message": { "type": "string", "minLength": 1 },
+        "check_authoritative_state": { "const": true },
+        "comms_thread_id": { "type": "string", "minLength": 1 },
+        "envelope_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "event_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "authoritative_refs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "enum": ["mailbox", "receipt-ledger", "ack-ledger", "event-history"]
+          }
+        }
+      }
+    },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "authoritative": { "const": false }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://brain-harness.local/schemas/delivery_receipt.schema.json",
+  "title": "Delivery Receipt (Authoritative Delivery Fact)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "record_type",
+    "authority_scope",
+    "receipt_id",
+    "event_id",
+    "envelope_id",
+    "identity",
+    "delivery_status",
+    "delivered_at",
+    "authoritative"
+  ],
+  "properties": {
+    "record_type": { "const": "delivery_receipt" },
+    "authority_scope": { "const": "authoritative-delivery-fact" },
+    "receipt_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "event_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "envelope_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "identity": { "$ref": "./comms_identity.schema.json" },
+    "delivery_status": {
+      "type": "string",
+      "enum": ["delivered", "delivery_failed"]
+    },
+    "delivered_at": { "type": "string", "format": "date-time" },
+    "authoritative": { "const": true }
+  }
+}
