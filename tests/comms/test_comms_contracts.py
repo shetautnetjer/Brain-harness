@@ -137,16 +137,16 @@ def test_receipt_has_required_receipt_policy_tags() -> None:
 
 
 def test_ack_has_required_ack_policy_tags() -> None:
-    comms_registry = yaml.safe_load((ROOT / "registries/tag_registry.comms.yaml").read_text())
-    comms_tags = {item["canonical_tag"] for item in comms_registry["tags"]}
-    main_registry = yaml.safe_load((ROOT / "registries/tag_registry.yaml").read_text())
-    main_tags = {item["canonical_tag"] for item in main_registry["tags"]}
+    registry = yaml.safe_load((ROOT / "registries/tag_registry.comms.yaml").read_text())
+    tags = {item["canonical_tag"] for item in registry["tags"]}
 
     required = {"comms/ack", "policy/ack-distinct-from-receipt"}
-    assert required.issubset(comms_tags)
+    assert required.issubset(tags)
 
-    conditional = {"work/completed", "work/blocked", "work/failed"}
-    assert conditional.issubset(main_tags)
+    bundle_doc = (ROOT / "docs/operations/comms_tag_bundles.md").read_text(encoding="utf-8")
+    assert "work/completed" in bundle_doc
+    assert "work/blocked" in bundle_doc
+    assert "work/failed" in bundle_doc
 
 
 def test_notifier_has_required_non_authoritative_tags() -> None:

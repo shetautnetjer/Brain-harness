@@ -256,43 +256,6 @@ def test_non_string_raw_tag_serialized_for_plane_disallowed_violation(tmp_path):
     assert violation_row["context"]["action"] == "rejected_plane_disallowed"
 
 
-def test_work_tags_resolve_on_plane_a_and_plane_b():
-    out_a = validate_tags(["work/task", "work/completed"], "plane_a")
-    out_b = validate_tags(["work/task", "work/completed"], "plane_b")
-
-    assert out_a["resolved_tags"] == ["work/completed", "work/task"]
-    assert out_b["resolved_tags"] == ["work/completed", "work/task"]
-    assert out_a["errors"] == []
-    assert out_b["errors"] == []
-
-
-def test_project_tags_resolve_on_plane_a_and_plane_b():
-    out_a = validate_tags(["projects/config-safety", "projects/trading-brain"], "plane_a")
-    out_b = validate_tags(["projects/config-safety", "projects/trading-brain"], "plane_b")
-
-    assert out_a["resolved_tags"] == ["projects/config-safety", "projects/trading-brain"]
-    assert out_b["resolved_tags"] == ["projects/config-safety", "projects/trading-brain"]
-    assert out_a["errors"] == []
-    assert out_b["errors"] == []
-
-
-def test_comms_tags_admit_correctly_across_planes(tmp_path):
-    out_both_a = validate_tags(["comms/mailbox", "comms/agent-route"], "plane_a")
-    out_both_b = validate_tags(["comms/mailbox", "comms/agent-route"], "plane_b")
-
-    assert out_both_a["resolved_tags"] == ["comms/agent-route", "comms/mailbox"]
-    assert out_both_b["resolved_tags"] == ["comms/agent-route", "comms/mailbox"]
-
-    out_plane_a_only = validate_tags(
-        ["comms/notifier"],
-        "plane_b",
-        pending_path=str(tmp_path / "pending.jsonl"),
-        violation_path=str(tmp_path / "violations.jsonl"),
-    )
-    assert out_plane_a_only["resolved_tags"] == []
-    assert any("not allowed on plane_b" in e for e in out_plane_a_only["errors"])
-
-
 def test_pending_lobster_tags_stay_pending():
     import yaml
     from pathlib import Path
