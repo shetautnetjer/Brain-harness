@@ -254,3 +254,18 @@ def test_non_string_raw_tag_serialized_for_plane_disallowed_violation(tmp_path):
     assert violation_row["context"]["raw_tag"] == "memory/canonical"
     assert violation_row["context"]["raw_tag_type"] == "_StringableCanonicalMemory"
     assert violation_row["context"]["action"] == "rejected_plane_disallowed"
+
+
+def test_pending_lobster_tags_stay_pending():
+    import yaml
+    from pathlib import Path
+
+    main = yaml.safe_load(Path("registries/tag_registry.yaml").read_text(encoding="utf-8"))
+    comms = yaml.safe_load(Path("registries/tag_registry.comms.yaml").read_text(encoding="utf-8"))
+
+    main_tags = {row["canonical_tag"]: row for row in main.get("tags", [])}
+    comms_tags = {row["canonical_tag"]: row for row in comms.get("tags", [])}
+
+    assert main_tags["workflow-substrate/lobster"]["status"] == "pending"
+    assert comms_tags["workflow-substrate/lobster"]["status"] == "pending"
+    assert comms_tags["comms/lobster-adapter"]["status"] == "pending"

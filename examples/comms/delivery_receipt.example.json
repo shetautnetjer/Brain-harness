@@ -15,5 +15,10 @@
   },
   "delivery_status": "delivered",
   "delivered_at": "2026-03-14T12:00:01Z",
+  "tags": [
+    "comms/receipt",
+    "comms/delivery-attempt",
+    "policy/receipt-required"
+  ],
   "authoritative": true
 }
