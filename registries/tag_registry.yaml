@@ -778,14 +778,6 @@ tags:
   - plane_b
   status: active
   notes: 'Workflow step: handoff.'
-- canonical_tag: comms/mailbox
-  aliases: []
-  category: comms
-  planes_allowed:
-  - plane_a
-  - plane_b
-  status: active
-  notes: Authoritative mailbox storage subsystem.
 - canonical_tag: comms/receipt
   aliases: []
   category: comms
@@ -831,13 +823,6 @@ tags:
   - plane_a
   status: active
   notes: Consumers must re-read mailbox or ledger for truth.
-- canonical_tag: comms/fs-watch
-  aliases: []
-  category: comms
-  planes_allowed:
-  - plane_a
-  status: active
-  notes: Filesystem watch wakeup path.
 - canonical_tag: policy/receipt-required
   aliases: []
   category: policy
@@ -861,15 +846,6 @@ tags:
   - plane_a
   status: active
   notes: Notification channels are derived-only.
-- canonical_tag: work/completed
-  aliases:
-  - completed
-  category: work
-  planes_allowed:
-  - plane_a
-  - plane_b
-  status: active
-  notes: Work completed successfully.
 - canonical_tag: episode/failure
   aliases: []
   category: episode

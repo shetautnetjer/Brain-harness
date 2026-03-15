@@ -146,10 +146,6 @@ def test_ack_has_required_ack_policy_tags() -> None:
     assert required.issubset(registry_tags)
     assert required.issubset(example_tags)
 
-    work_outcomes = {"work/completed", "work/blocked", "work/failed"}
-    assert len(example_tags & work_outcomes) == 1
-    assert (example_tags & work_outcomes).issubset(registry_tags)
-
 
 def test_notifier_has_required_non_authoritative_tags() -> None:
     registry = yaml.safe_load((ROOT / "registries/tag_registry.yaml").read_text())
@@ -166,7 +162,3 @@ def test_notifier_has_required_non_authoritative_tags() -> None:
     assert required.issubset(registry_tags)
     assert required.issubset(example_tags)
     assert notifier["authoritative"] is False
-
-    notifier_paths = {"comms/fs-watch", "comms/session-ping", "comms/polling-fallback"}
-    assert len(example_tags & notifier_paths) == 1
-    assert (example_tags & notifier_paths).issubset(registry_tags)

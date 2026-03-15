@@ -16,8 +16,7 @@
     "comms/notifier",
     "comms/notification-hint",
     "comms/check-authoritative-state",
-    "policy/notifier-nonauthoritative",
-    "comms/fs-watch"
+    "policy/notifier-nonauthoritative"
   ],
   "authoritative": false
 }
