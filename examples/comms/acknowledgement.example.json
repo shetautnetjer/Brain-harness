@@ -15,5 +15,10 @@
   },
   "ack_status": "accepted",
   "acknowledged_at": "2026-03-14T12:00:03Z",
+  "tags": [
+    "comms/ack",
+    "policy/ack-distinct-from-receipt",
+    "work/completed"
+  ],
   "authoritative": true
 }
