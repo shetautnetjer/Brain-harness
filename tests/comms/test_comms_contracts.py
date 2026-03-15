@@ -115,3 +115,51 @@ def test_authority_discipline_tags_present() -> None:
     assert tags["policy/notifier-nonauthoritative"]["status"] == "active"
     assert tags["event/append-only"]["status"] == "active"
     assert tags["memory/vector-index-only"]["status"] == "active"
+
+
+def test_envelope_has_required_transport_and_event_tags() -> None:
+    envelope_tags = set(_load_json("examples/comms/envelope.example.json")["tags"])
+
+    assert "comms/mailbox" in envelope_tags
+    assert "event/envelope" in envelope_tags
+    assert {"workflow/handoff", "workflow/escalate", "workflow/retry"} & envelope_tags
+
+
+def test_receipt_has_required_receipt_policy_tags() -> None:
+    registry = yaml.safe_load((ROOT / "registries/tag_registry.comms.yaml").read_text())
+    tags = {item["canonical_tag"] for item in registry["tags"]}
+
+    required = {"comms/receipt", "comms/delivery-attempt", "policy/receipt-required"}
+    assert required.issubset(tags)
+
+    conditional = {"comms/delivery-failure", "comms/redelivery", "comms/receipt-missing"}
+    assert conditional.issubset(tags)
+
+
+def test_ack_has_required_ack_policy_tags() -> None:
+    registry = yaml.safe_load((ROOT / "registries/tag_registry.comms.yaml").read_text())
+    tags = {item["canonical_tag"] for item in registry["tags"]}
+
+    required = {"comms/ack", "policy/ack-distinct-from-receipt"}
+    assert required.issubset(tags)
+
+    bundle_doc = (ROOT / "docs/operations/comms_tag_bundles.md").read_text(encoding="utf-8")
+    assert "work/completed" in bundle_doc
+    assert "work/blocked" in bundle_doc
+    assert "work/failed" in bundle_doc
+
+
+def test_notifier_has_required_non_authoritative_tags() -> None:
+    registry = yaml.safe_load((ROOT / "registries/tag_registry.comms.yaml").read_text())
+    tags = {item["canonical_tag"] for item in registry["tags"]}
+
+    required = {
+        "comms/notifier",
+        "comms/notification-hint",
+        "comms/check-authoritative-state",
+        "policy/notifier-nonauthoritative",
+    }
+    assert required.issubset(tags)
+
+    conditional = {"comms/fs-watch", "comms/session-ping", "comms/polling-fallback"}
+    assert conditional.issubset(tags)
