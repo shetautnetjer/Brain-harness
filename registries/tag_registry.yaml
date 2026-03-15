@@ -238,6 +238,90 @@ tags:
   - plane_b
   status: active
   notes: Conversation across channels.
+- canonical_tag: comms/mailbox
+  aliases: []
+  category: comms
+  planes_allowed:
+  - plane_a
+  - plane_b
+  status: active
+  notes: Authoritative mailbox storage subsystem.
+- canonical_tag: comms/receipt
+  aliases: []
+  category: comms
+  planes_allowed:
+  - plane_a
+  - plane_b
+  status: active
+  notes: Delivery receipt record.
+- canonical_tag: comms/ack
+  aliases: []
+  category: comms
+  planes_allowed:
+  - plane_a
+  - plane_b
+  status: active
+  notes: Acknowledgement record distinct from receipt.
+- canonical_tag: comms/notifier
+  aliases: []
+  category: comms
+  planes_allowed:
+  - plane_a
+  status: active
+  notes: Derived notifier channel; never transport truth.
+- canonical_tag: comms/event-history
+  aliases: []
+  category: comms
+  planes_allowed:
+  - plane_a
+  - plane_b
+  status: active
+  notes: Communication lifecycle history lane.
+- canonical_tag: comms/redelivery
+  aliases: []
+  category: comms
+  planes_allowed:
+  - plane_a
+  status: active
+  notes: Redelivery workflow/event.
+- canonical_tag: comms/delivery-failure
+  aliases: []
+  category: comms
+  planes_allowed:
+  - plane_a
+  status: active
+  notes: Delivery failure classification.
+- canonical_tag: comms/receipt-missing
+  aliases: []
+  category: comms
+  planes_allowed:
+  - plane_a
+  status: active
+  notes: Receipt missing diagnostic condition.
+- canonical_tag: comms/agent-route
+  aliases: []
+  category: comms
+  planes_allowed:
+  - plane_a
+  - plane_b
+  status: active
+  notes: Route envelope to agent endpoint.
+- canonical_tag: comms/work-item-link
+  aliases: []
+  category: comms
+  planes_allowed:
+  - plane_a
+  - plane_b
+  status: active
+  notes: Link a comms record to a work/task identity.
+- canonical_tag: comms/envelope-lineage
+  aliases: []
+  category: comms
+  planes_allowed:
+  - plane_a
+  - plane_b
+  status: active
+  notes: Envelope lineage relationship tracking.
 - canonical_tag: telemetry/gateway-log
   aliases: []
   category: telemetry
@@ -278,6 +362,175 @@ tags:
   - plane_b
   status: active
   notes: Governed adaptation for workflow ranking.
+- canonical_tag: work/task
+  aliases:
+  - task
+  category: work
+  planes_allowed:
+  - plane_a
+  - plane_b
+  status: active
+  notes: Work task object or task-linked record.
+- canonical_tag: work/started
+  aliases: []
+  category: work
+  planes_allowed:
+  - plane_a
+  - plane_b
+  status: active
+  notes: Work has started.
+- canonical_tag: work/blocked
+  aliases: []
+  category: work
+  planes_allowed:
+  - plane_a
+  - plane_b
+  status: active
+  notes: Work is blocked pending dependency, review, or fix.
+- canonical_tag: work/completed
+  aliases:
+  - completed
+  category: work
+  planes_allowed:
+  - plane_a
+  - plane_b
+  status: active
+  notes: Work completed successfully.
+- canonical_tag: work/failed
+  aliases:
+  - failed
+  category: work
+  planes_allowed:
+  - plane_a
+  - plane_b
+  status: active
+  notes: Work failed.
+- canonical_tag: work/issue
+  aliases:
+  - issue
+  category: work
+  planes_allowed:
+  - plane_a
+  - plane_b
+  status: active
+  notes: Structured issue or blocker record tied to work.
+- canonical_tag: work/deadletter
+  aliases: []
+  category: work
+  planes_allowed:
+  - plane_a
+  status: active
+  notes: Work item or comms record moved to deadletter/quarantine.
+- canonical_tag: projects/config-safety
+  aliases:
+  - config-safety
+  category: projects
+  planes_allowed:
+  - plane_a
+  - plane_b
+  status: active
+  notes: Project umbrella for config safety hardening.
+- canonical_tag: projects/event-spine
+  aliases:
+  - event-spine
+  category: projects
+  planes_allowed:
+  - plane_a
+  - plane_b
+  status: active
+  notes: Project umbrella for event spine grounding and migration.
+- canonical_tag: projects/mailbox-runtime
+  aliases:
+  - mailbox-runtime
+  category: projects
+  planes_allowed:
+  - plane_a
+  - plane_b
+  status: active
+  notes: Project umbrella for communications and mailbox runtime work.
+- canonical_tag: projects/tag-governance
+  aliases:
+  - tag-governance
+  category: projects
+  planes_allowed:
+  - plane_a
+  - plane_b
+  status: active
+  notes: Project umbrella for tag atlas and validation hardening.
+- canonical_tag: projects/media-pipeline
+  aliases:
+  - media-pipeline
+  category: projects
+  planes_allowed:
+  - plane_a
+  - plane_b
+  status: active
+  notes: Project umbrella for media card and perception pipeline work.
+- canonical_tag: projects/trading-brain
+  aliases:
+  - trading-brain
+  category: projects
+  planes_allowed:
+  - plane_a
+  - plane_b
+  status: active
+  notes: Project umbrella for trading cognition, signals, and execution support.
+- canonical_tag: observations/runtime
+  aliases: []
+  category: observations
+  planes_allowed:
+  - plane_a
+  - plane_b
+  status: active
+  notes: Runtime health or operational observation.
+- canonical_tag: observations/policy-drift
+  aliases: []
+  category: observations
+  planes_allowed:
+  - plane_a
+  - plane_b
+  status: active
+  notes: Observation of doctrine or policy drift.
+- canonical_tag: media/card
+  aliases: []
+  category: media
+  planes_allowed:
+  - plane_a
+  - plane_b
+  status: active
+  notes: Media card artifact.
+- canonical_tag: media/evidence
+  aliases: []
+  category: media
+  planes_allowed:
+  - plane_a
+  - plane_b
+  status: active
+  notes: Media evidence artifact.
+- canonical_tag: trading/signal
+  aliases: []
+  category: trading
+  planes_allowed:
+  - plane_a
+  - plane_b
+  status: active
+  notes: Trading signal artifact or observation.
+- canonical_tag: trading/execution
+  aliases: []
+  category: trading
+  planes_allowed:
+  - plane_a
+  - plane_b
+  status: active
+  notes: Trading execution artifact or event.
+- canonical_tag: trading/risk
+  aliases: []
+  category: trading
+  planes_allowed:
+  - plane_a
+  - plane_b
+  status: active
+  notes: Trading risk evaluation or artifact.
 - canonical_tag: workflow-substrate/langgraph
   aliases: []
   category: workflow-substrate
