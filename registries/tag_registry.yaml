@@ -525,6 +525,74 @@ tags:
   - plane_b
   status: active
   notes: 'Workflow step: handoff.'
+- canonical_tag: comms/receipt
+  aliases: []
+  category: comms
+  planes_allowed:
+  - plane_a
+  - plane_b
+  status: active
+  notes: Delivery receipt record.
+- canonical_tag: comms/delivery-attempt
+  aliases: []
+  category: comms
+  planes_allowed:
+  - plane_a
+  - plane_b
+  status: active
+  notes: Concrete delivery attempt event.
+- canonical_tag: comms/ack
+  aliases: []
+  category: comms
+  planes_allowed:
+  - plane_a
+  - plane_b
+  status: active
+  notes: Acknowledgement record distinct from receipt.
+- canonical_tag: comms/notifier
+  aliases: []
+  category: comms
+  planes_allowed:
+  - plane_a
+  status: active
+  notes: Derived notifier channel; never transport truth.
+- canonical_tag: comms/notification-hint
+  aliases: []
+  category: comms
+  planes_allowed:
+  - plane_a
+  status: active
+  notes: Notification is a hint to re-check authoritative state.
+- canonical_tag: comms/check-authoritative-state
+  aliases: []
+  category: comms
+  planes_allowed:
+  - plane_a
+  status: active
+  notes: Consumers must re-read mailbox or ledger for truth.
+- canonical_tag: policy/receipt-required
+  aliases: []
+  category: policy
+  planes_allowed:
+  - plane_a
+  - plane_b
+  status: active
+  notes: Delivery receipt is required for delivery success claims.
+- canonical_tag: policy/ack-distinct-from-receipt
+  aliases: []
+  category: policy
+  planes_allowed:
+  - plane_a
+  - plane_b
+  status: active
+  notes: Ack and receipt are distinct records.
+- canonical_tag: policy/notifier-nonauthoritative
+  aliases: []
+  category: policy
+  planes_allowed:
+  - plane_a
+  status: active
+  notes: Notification channels are derived-only.
 - canonical_tag: episode/failure
   aliases: []
   category: episode

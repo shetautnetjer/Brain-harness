@@ -109,9 +109,56 @@ def test_pending_tags_are_not_active() -> None:
 
 
 def test_authority_discipline_tags_present() -> None:
-    registry = yaml.safe_load((ROOT / "registries/tag_registry.comms.yaml").read_text())
+    registry = yaml.safe_load((ROOT / "registries/tag_registry.yaml").read_text())
     tags = {item["canonical_tag"]: item for item in registry["tags"]}
 
     assert tags["policy/notifier-nonauthoritative"]["status"] == "active"
     assert tags["event/append-only"]["status"] == "active"
     assert tags["memory/vector-index-only"]["status"] == "active"
+
+
+def test_envelope_has_required_transport_and_event_tags() -> None:
+    envelope_tags = set(_load_json("examples/comms/envelope.example.json")["tags"])
+
+    assert "comms/mailbox" in envelope_tags
+    assert "event/envelope" in envelope_tags
+    assert {"workflow/handoff", "workflow/escalate", "workflow/retry"} & envelope_tags
+
+
+def test_receipt_has_required_receipt_policy_tags() -> None:
+    registry = yaml.safe_load((ROOT / "registries/tag_registry.yaml").read_text())
+    registry_tags = {item["canonical_tag"] for item in registry["tags"]}
+    example_tags = set(_load_json("examples/comms/delivery_receipt.example.json")["tags"])
+
+    required = {"comms/receipt", "comms/delivery-attempt", "policy/receipt-required"}
+    assert required.issubset(registry_tags)
+    assert required.issubset(example_tags)
+
+    # Conditional tags are validated only when matching conditions are represented in payloads.
+
+
+def test_ack_has_required_ack_policy_tags() -> None:
+    registry = yaml.safe_load((ROOT / "registries/tag_registry.yaml").read_text())
+    registry_tags = {item["canonical_tag"] for item in registry["tags"]}
+    example_tags = set(_load_json("examples/comms/acknowledgement.example.json")["tags"])
+
+    required = {"comms/ack", "policy/ack-distinct-from-receipt"}
+    assert required.issubset(registry_tags)
+    assert required.issubset(example_tags)
+
+
+def test_notifier_has_required_non_authoritative_tags() -> None:
+    registry = yaml.safe_load((ROOT / "registries/tag_registry.yaml").read_text())
+    registry_tags = {item["canonical_tag"] for item in registry["tags"]}
+    notifier = _load_json("examples/comms/notifier_event.example.json")
+    example_tags = set(notifier["tags"])
+
+    required = {
+        "comms/notifier",
+        "comms/notification-hint",
+        "comms/check-authoritative-state",
+        "policy/notifier-nonauthoritative",
+    }
+    assert required.issubset(registry_tags)
+    assert required.issubset(example_tags)
+    assert notifier["authoritative"] is False
