@@ -1,31 +1,32 @@
 # 05 — Data Contracts
 
-## Current-state read
+## Verified in code
 - Contracts exist for ingest, identity, plane separation, provenance, retrieval, and tags.
-- Identity contract uses UUIDv7 provenance spine and semantic `doc_id`/deterministic `chunk_id`.
-- Envelope/receipt/state-machine contracts are only partial in current implementation.
+- Comms JSON schemas are present for `comms_identity`, `envelope`, `delivery_receipt`, `acknowledgement`, and `notifier_event`.
+- Identity contract uses UUIDv7 provenance spine and semantic `doc_id`/deterministic `chunk_id` for core ingest identity.
 
-## Gap list
-1. Envelope-specific schema contract is not fully implemented as an enforced runtime object.
-2. Receipt/ack guarantees are not implemented/proven.
-3. Replay guarantees are not implemented/proven.
-4. Identity naming doctrine and current contract fields differ in places.
+## Verified in tests
+- `tests/comms/test_comms_contracts.py` validates authority-scope separation and UUIDv7 concrete ID shape across comms example records.
+- The same suite validates required comms tag bundle expectations for envelope/receipt/ack/notifier records.
+- `tests/test_schema_contracts.py` validates machine-readable contract files and ingest alignment tables.
 
-## Smallest safe patch plan
-- Preserve current contract fields as implementation truth.
-- Document additive migration guidance for identity naming alignment.
-- Keep envelope/receipt/replay items explicitly marked migration target.
+## Verified in runtime inventory
+- Runtime inventory artifacts in-repo are examples/seeds, not discovered proof of live contract enforcement.
 
-## Exact files to edit
-- `docs/project/05_DATA_CONTRACTS.md`
-- `docs/project/06_ACTIVE_TODO.md`
-- `SOURCE_03_DATA_CONTRACTS_AND_MIGRATION.md`
-- `docs/project/07_EVENT_AND_MAIL_ALIGNMENT.md`
+## Settled doctrine
+- Preserve Plane A vs Plane B separation.
+- Kimi as sole Plane B writer remains doctrine/planning constraint, not claimed runtime-enforced exclusivity without direct proof.
 
-## Validation steps / tests
-- Run `pytest -q`.
-- Confirm docs only; no runtime behavior change.
+## Migration target
+1. Keep current contract fields as implementation truth while documenting additive naming alignment where doctrine differs.
+2. Ground envelope/receipt/ack/replay/promotion semantics in runtime evidence before promoting beyond schema/test level.
+3. Keep contract evolution additive and non-breaking.
 
-## Doctrine risks / drift risks
-- Overclaiming delivery/receipt/replay guarantees would conflict with repo evidence.
-- Replacing current identity fields non-additively would violate migration doctrine.
+## Future idea / not yet implemented
+- Guarantee-level delivery, receipt, acknowledgement, replay, and promotion semantics in runtime.
+- Active Lobster runtime integration for comms workflow execution.
+
+## Doctrine notes / non-overclaim guardrails
+- Schema/test presence is implementation evidence for shape and separation, not proof of end-to-end runtime guarantees.
+- Do not claim guaranteed delivery, guaranteed receipt, guaranteed acknowledgement, guaranteed replay, or guaranteed promotion from schema presence alone.
+- Do not redesign schemas or registries in this pass.
