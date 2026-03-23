@@ -4,6 +4,8 @@ from pathlib import Path
 
 import yaml
 
+from plugins.tag_guard.validator import validate_tags
+
 ROOT = Path(__file__).resolve().parents[2]
 UUID7_RE = re.compile(r"^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$")
 
@@ -106,6 +108,32 @@ def test_pending_tags_are_not_active() -> None:
     for tag in pending:
         assert tag in tags
         assert tags[tag]["status"] == "pending"
+
+
+def test_comms_supplemental_registry_only_marks_main_registry_tags_active() -> None:
+    main_registry = yaml.safe_load((ROOT / "registries/tag_registry.yaml").read_text())
+    comms_registry = yaml.safe_load((ROOT / "registries/tag_registry.comms.yaml").read_text())
+
+    main_tags = {item["canonical_tag"] for item in main_registry["tags"]}
+
+    for item in comms_registry["tags"]:
+        if item["status"] == "active":
+            assert item["canonical_tag"] in main_tags
+
+
+def test_comms_examples_validate_against_main_registry_plane_a() -> None:
+    examples = [
+        "examples/comms/envelope.example.json",
+        "examples/comms/delivery_receipt.example.json",
+        "examples/comms/acknowledgement.example.json",
+        "examples/comms/notifier_event.example.json",
+    ]
+
+    for path in examples:
+        payload = _load_json(path)
+        result = validate_tags(payload["tags"], plane="plane_a")
+        assert result["errors"] == [], path
+        assert set(result["resolved_tags"]) == set(payload["tags"]), path
 
 
 def test_authority_discipline_tags_present() -> None:
