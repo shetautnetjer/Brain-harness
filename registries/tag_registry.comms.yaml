@@ -1,8 +1,8 @@
 version: 0.1
 registry: comms
-notes: Proposed communications extension registry aligned with Brain-harness canonical
-  tag style. Active tags are usable now; pending tags are migration targets and must
-  not be treated as active canon.
+notes: Supplemental communications migration registry. Validator truth remains registries/tag_registry.yaml;
+  entries here are guidance or admission targets only. Only tags already present in
+  the main registry should be treated as validator-active canon.
 tags:
 - canonical_tag: governance/doctrine
   aliases: []
@@ -97,13 +97,13 @@ tags:
 - canonical_tag: comms/inbox
   aliases: []
   category: comms
-  status: active
-  notes: Inbox lane for inbound envelopes.
+  status: pending
+  notes: Inbox lane for inbound envelopes. Pending until admitted to registries/tag_registry.yaml.
 - canonical_tag: comms/outbox
   aliases: []
   category: comms
-  status: active
-  notes: Outbox lane for outbound envelopes.
+  status: pending
+  notes: Outbox lane for outbound envelopes. Pending until admitted to registries/tag_registry.yaml.
 - canonical_tag: comms/receipt
   aliases: []
   category: comms
@@ -117,8 +117,8 @@ tags:
 - canonical_tag: comms/courier
   aliases: []
   category: comms
-  status: active
-  notes: Courier mechanism for delivery attempts.
+  status: pending
+  notes: Courier mechanism for delivery attempts. Pending until admitted to registries/tag_registry.yaml.
 - canonical_tag: comms/delivery-attempt
   aliases: []
   category: comms
@@ -142,18 +142,18 @@ tags:
 - canonical_tag: comms/fs-watch
   aliases: []
   category: comms
-  status: active
-  notes: Filesystem watch wakeup path.
+  status: pending
+  notes: Filesystem watch wakeup path. Pending until admitted to registries/tag_registry.yaml.
 - canonical_tag: comms/session-ping
   aliases: []
   category: comms
-  status: active
-  notes: Session ping wakeup path.
+  status: pending
+  notes: Session ping wakeup path. Pending until admitted to registries/tag_registry.yaml.
 - canonical_tag: comms/polling-fallback
   aliases: []
   category: comms
-  status: active
-  notes: Polling fallback when live wakeups fail.
+  status: pending
+  notes: Polling fallback when live wakeups fail. Pending until admitted to registries/tag_registry.yaml.
 - canonical_tag: comms/event-history
   aliases: []
   category: comms
@@ -162,13 +162,13 @@ tags:
 - canonical_tag: comms/ledger-tail
   aliases: []
   category: comms
-  status: active
-  notes: Append-only tail reading for replay.
+  status: pending
+  notes: Append-only tail reading for replay. Pending until admitted to registries/tag_registry.yaml.
 - canonical_tag: comms/replay
   aliases: []
   category: comms
-  status: active
-  notes: Replay from append-only history.
+  status: pending
+  notes: Replay from append-only history. Pending until admitted to registries/tag_registry.yaml.
 - canonical_tag: comms/agent-route
   aliases: []
   category: comms
@@ -187,8 +187,8 @@ tags:
 - canonical_tag: comms/ack-timeout
   aliases: []
   category: comms
-  status: active
-  notes: Ack timeout handling.
+  status: pending
+  notes: Ack timeout handling. Pending until admitted to registries/tag_registry.yaml.
 - canonical_tag: comms/redelivery
   aliases: []
   category: comms
@@ -202,8 +202,8 @@ tags:
 - canonical_tag: comms/notifier-drop
   aliases: []
   category: comms
-  status: active
-  notes: Notifier drop diagnostic condition.
+  status: pending
+  notes: Notifier drop diagnostic condition. Pending until admitted to registries/tag_registry.yaml.
 - canonical_tag: comms/receipt-missing
   aliases: []
   category: comms
@@ -227,8 +227,9 @@ tags:
 - canonical_tag: policy/uuid7-preferred
   aliases: []
   category: policy
-  status: active
-  notes: UUID7 required for concrete event objects in this scaffold.
+  status: pending
+  notes: UUID7 required for concrete event objects in this scaffold. Pending until
+    admitted to registries/tag_registry.yaml.
 - canonical_tag: workflow-substrate/lobster
   aliases: []
   category: workflow-substrate
